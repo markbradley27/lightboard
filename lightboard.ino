@@ -9,16 +9,14 @@
 CRGB leds[NUM_LEDS];
 
 class Animation {
- public:
+public:
   virtual void tick() = 0;
   virtual CRGB value(int index) = 0;
 };
 
 class ChristmasScroll : public Animation {
- public:
-  void tick() override {
-    offset = (offset + 1) % 3;
-  }
+public:
+  void tick() override { offset = (offset + 1) % 3; }
 
   CRGB value(int index) override {
     if ((index + offset) % 3 == 0) {
@@ -30,15 +28,13 @@ class ChristmasScroll : public Animation {
     }
   }
 
- private:
+private:
   int offset = 0;
 };
 
 class UsaScroll : public Animation {
- public:
-  void tick() override {
-    offset = (offset + 1) % 3;
-  }
+public:
+  void tick() override { offset = (offset + 1) % 3; }
 
   CRGB value(int index) override {
     if ((index + offset) % 3 == 0) {
@@ -50,17 +46,16 @@ class UsaScroll : public Animation {
     }
   }
 
- private:
+private:
   int offset = 0;
 };
 
 class Comet : public Animation {
- public:
-  Comet(unsigned int hue, unsigned int head, int speed) : hue_(hue), head_(head), speed_(speed) {}
+public:
+  Comet(unsigned int hue, unsigned int head, int speed)
+      : hue_(hue), head_(head), speed_(speed) {}
 
-  void tick() override {
-    head_ = (head_ + speed_) % NUM_LEDS;
-  }
+  void tick() override { head_ = (head_ + speed_) % NUM_LEDS; }
 
   CRGB value(int index) override {
     if (index > head_) {
@@ -73,14 +68,14 @@ class Comet : public Animation {
     return CHSV(hue_, 255, brightness);
   }
 
- private:
+private:
   unsigned int hue_;
   unsigned int head_;
   int speed_;
 };
 
 class Comets : public Animation {
- public:
+public:
   Comets() {
     for (int i = 0; i < 25; ++i) {
       comets[i] = new Comet(random8(), random8(), 1);
@@ -93,7 +88,7 @@ class Comets : public Animation {
     }
   }
 
-  CRGB value (int index) override {
+  CRGB value(int index) override {
     CRGB v = CRGB::Black;
     for (int i = 0; i < 25; ++i) {
       v += comets[i]->value(index);
@@ -101,16 +96,16 @@ class Comets : public Animation {
     return v;
   }
 
- private:
-  Comet* comets[25];
+private:
+  Comet *comets[25];
 };
 
-
-Animation* a = new Comets();
+Animation *a = new Comets();
 unsigned long lastMillis = 0;
 
-void setup() { 
-  FastLED.addLeds<WS2812B, DATA_PIN, GRB>(leds, NUM_LEDS);  // GRB ordering is typical
+void setup() {
+  FastLED.addLeds<WS2812B, DATA_PIN, GRB>(leds,
+                                          NUM_LEDS); // GRB ordering is typical
   FastLED.setBrightness(BRIGHTNESS);
 }
 
