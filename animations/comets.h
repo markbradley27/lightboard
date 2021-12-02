@@ -26,9 +26,9 @@ public:
 
 private:
   const unsigned int num_leds_;
-  unsigned int hue_;
+  const unsigned int hue_;
   unsigned int head_;
-  int speed_;
+  const int speed_;
 };
 
 class Comets : public AnimationFull {
